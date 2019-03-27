@@ -1,31 +1,28 @@
 describe("Mine Sweeper Tests", function() {
     describe("Game Board Tests", function() {
         let length = 1;
-        let cell = new Cell();
+        let cellLocation = 0;
+        let board;
+        let cell;
+
+        beforeEach(function(){
+            board = new Board(length);
+            cell = new Cell();
+            board.addCells(cell);
+        })
 
         it("given square board then number of cells equal to square of length", function() {
-            let board = new Board(length);
-
-            board.addCells(cell);
-
             expect(board.getCells().length).toBe(length);
         });
 
         it("given cell with mine when reveal then game state is LOSE", function() {
-            let cellLocation = 0;
-            let board = new Board(length);
-            board.addCells(cell);
             board.addMines();
-            board.revealCell(cellLocation)
+            board.revealCell(cellLocation);
 
-           expect(board.getGameState()).toEqual(GameState.LOSE);
+            expect(board.getGameState()).toEqual(GameState.LOSE);
         });
 
         it("given remaining unrevealed cells equals mines then game state is WIN", function() {
-            let cellLocation = 0;
-            let cell = new Cell();
-            let board = new Board(length);
-            board.addCells(cell);
             board.revealCell(cellLocation);
 
             expect(board.getGameState()).toEqual(GameState.WIN);
