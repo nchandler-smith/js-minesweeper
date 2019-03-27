@@ -1,7 +1,13 @@
+const GameState = {
+    IN_PROGRESS: 0,
+    WIN: 1,
+    LOSE: 2
+};
+
 function Board(length) {
     this.length = length;
     this.cells = [];
-    this.gameFinished = false;
+    this.gameState = GameState.IN_PROGRESS;
 }
 
 Board.prototype.addCells = function(cell) {
@@ -19,13 +25,15 @@ Board.prototype.addMines = function() {
 };
 
 Board.prototype.revealCell = function(cellIndex) {
-    if(this.cells[cellIndex].reveal) {
-        this.gameFinished = true;
+    if(this.cells[cellIndex].reveal()) {
+        this.gameState = GameState.LOSE;
+    } else {
+        this.gameState = GameState.WIN;
     }
 };
 
-Board.prototype.isGameFinished = function() {
-    return this.gameFinished;
+Board.prototype.getGameState = function() {
+    return this.gameState;
 };
 
 function Cell() {
