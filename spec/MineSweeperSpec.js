@@ -33,7 +33,11 @@ describe("Mine Sweeper Tests", function() {
     });
 
     describe("Cell Tests", function() {
-        let cell = new Cell();
+        let cell;
+
+        beforeEach(function(){
+            cell = new Cell();
+        });
         it("given no mine in cell when reveal then miss", function() {
             expect(cell.reveal()).toBeFalsy();
         });
