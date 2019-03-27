@@ -1,9 +1,14 @@
 describe("Mine Sweeper Tests", function() {
-
     describe("Game Board Tests", function() {
-        it("should have one cell", function() {
-            let board = new Board();
-            expect(board.numberOfCells).toEqual(1);
+        let length = 1;
+
+        it("should have length", function() {
+            let cell = new Cell();
+            let board = new Board(length);
+
+            board.addCells(cell);
+
+            expect(board.getCells().length).toBe(length);
         });
     });
 
@@ -13,7 +18,7 @@ describe("Mine Sweeper Tests", function() {
             expect(cell.reveal()).toBeFalsy();
         });
 
-        it("given placeMine is called, cell should have mine", function() {
+        it("given mine in cell when reveal then hit", function() {
            let cell = new Cell();
            cell.placeMine();
            expect(cell.reveal()).toBeTruthy();
