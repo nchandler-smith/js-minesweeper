@@ -45,4 +45,3 @@ describe("Mine Sweeper Tests", function() {
         });
     });
 });
-
