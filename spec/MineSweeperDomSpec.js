@@ -1,6 +1,6 @@
 describe("Testing DOM manipulation", function() {
     it("when init then have a button with no text", function() {
-        dom = new DomManipulation();
+        let dom = new DomManipulation();
 
         const button = document.createElement('button');
         button.id = "Cell1";
@@ -12,18 +12,27 @@ describe("Testing DOM manipulation", function() {
     });
 
     it("given a cell with a mine, when revealed, button has * as text", function() {
-        dom = new DomManipulation();
-        const activeCellLocation = 0;
 
-        const desiredCell = document.createElement('button');
-        desiredCell.id = "Cell1";
-        desiredCell.value = "";
 
-        // replace next two lines with listener spoof logic
-        dom.board.addMines();
-        dom.board.revealCell(activeCellLocation);
+        /*let cellDOM = DomManipulation.cell("cell1");
 
-        expect(desiredCell.value).toEqual("*");
+        let newCell = new Cell();
+        let board = new Board(1);
+        board.addCells(newCell);
+        board.addMines();
+
+        // Create some sort of binding between cell.value and our newCell
+        cellDOM.addEventListener("click", ()=> {
+            board.revealCell(0);
+        });*/
+        let dom = new DomManipulation();
+        let form = dom.init().form[0];
+        document.body.appendChild(form);
+        let cellDOM = document.getElementById("Cell1");
+
+        cellDOM.click();
+
+        expect(cellDOM.value).toEqual("*");
 
 
     });

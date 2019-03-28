@@ -6,8 +6,14 @@ DomManipulation.prototype.init = function() {
 
     form.id = "GameBoard";
     input.id = "Cell1";
+    // build out board with cell(s)
+
+    input.addEventListener("click", () => {
+        // call board reveal
+    });
     form.appendChild(input);
     return {
         form
     }
 };
+
