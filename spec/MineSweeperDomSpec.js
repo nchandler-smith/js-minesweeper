@@ -1,4 +1,14 @@
 describe("Testing DOM manipulation", function() {
+    let length = 1;
+    let board;
+    let cell;
+
+    beforeEach(function(){
+        board = new Board(length);
+        cell = new Cell();
+        board.addCells(cell);
+    });
+
     it("when init then have a button with no text", function() {
         let dom = new DomManipulation();
 
@@ -8,7 +18,7 @@ describe("Testing DOM manipulation", function() {
         form.id = "GameBoard";
         form.appendChild(button);
 
-        expect(dom.init().form).toEqual(form);
+        expect(dom.init(board).form).toEqual(form);
     });
 
     it("given a cell with a mine, when revealed, button has * as text", function() {
@@ -26,14 +36,24 @@ describe("Testing DOM manipulation", function() {
             board.revealCell(0);
         });*/
         let dom = new DomManipulation();
-        let form = dom.init().form[0];
+        board.addMines();
+        let form = dom.init(board).form[0];
         document.body.appendChild(form);
         let cellDOM = document.getElementById("Cell1");
 
         cellDOM.click();
 
         expect(cellDOM.value).toEqual("*");
-
-
     });
+
+    it("given a cell without a mine, when revealed, button has empty text", function() {
+        let dom = new DomManipulation();
+        let form = dom.init(board).form[0];
+        document.body.appendChild(form);
+        let cellDOM = document.getElementById("Cell1");
+
+        cellDOM.click();
+
+        expect(cellDOM.value).toEqual("");
+    })
 });

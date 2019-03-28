@@ -9,7 +9,7 @@ describe("Mine Sweeper Tests", function() {
             board = new Board(length);
             cell = new Cell();
             board.addCells(cell);
-        })
+        });
 
         it("given square board then number of cells equal to square of length", function() {
             expect(board.getCells().length).toBe(length);
