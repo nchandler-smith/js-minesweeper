@@ -32,7 +32,7 @@ describe("Testing DOM manipulation", function () {
 
         cellDOM.click();
 
-        expect(cellDOM.value).toEqual("");
+        expect(cellDOM.innerHTML).toEqual("");
 
     });
 
@@ -41,7 +41,7 @@ describe("Testing DOM manipulation", function () {
         board.addMines();
         cellDOM.click();
 
-        expect(cellDOM.value).toEqual("*");
+        expect(cellDOM.innerHTML).toEqual("*");
 
     });
 });

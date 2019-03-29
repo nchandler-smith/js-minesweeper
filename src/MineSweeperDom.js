@@ -10,9 +10,9 @@ DomManipulation.prototype.init = function(board) {
 
     mineCell.addEventListener("click", () => {
         if(board.getCells()[0].reveal()) {
-            mineCell.value = "*";
+            mineCell.innerHTML = "*";
         } else {
-            mineCell.value = '';
+            mineCell.innerHTML = '';
         }
     });
 
