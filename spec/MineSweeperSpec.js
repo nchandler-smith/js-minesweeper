@@ -3,12 +3,10 @@ describe("Mine Sweeper Tests", function() {
         let length = 1;
         let cellLocation = 0;
         let board;
-        let cell;
 
         beforeEach(function(){
             board = new Board(length);
-            cell = new Cell();
-            board.addCells(cell);
+            board.addCells(Cell);
         });
 
         it("given square board then number of cells equal to square of length", function() {
@@ -16,7 +14,7 @@ describe("Mine Sweeper Tests", function() {
         });
 
         it("given cell with mine when reveal then game state is LOSE", function() {
-            board.addMines();
+            board.addMines([0]);
             board.revealCell(cellLocation);
 
             expect(board.getGameState()).toEqual(GameState.LOSE);
@@ -40,7 +38,7 @@ describe("Mine Sweeper Tests", function() {
         });
 
         it("given mine in cell when reveal then hit", function() {
-           cell.placeMine();
+           cell.placeMine([0]);
            expect(cell.reveal()).toBeTruthy();
         });
     });
