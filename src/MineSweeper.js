@@ -8,6 +8,8 @@ function Board(length) {
     this.length = length;
     this.cells = [];
     this.gameState = GameState.IN_PROGRESS;
+    this.unToggledCells = length;
+    this.numberOfMines = 0;
 }
 
 Board.prototype.addCells = function(cellClass) {
@@ -24,19 +26,25 @@ Board.prototype.addMines = function(...indices) {
     for (let index of indices) {
         this.cells[index].placeMine();
     }
+
+    this.numberOfMines = indices.length;
 };
 
 Board.prototype.revealCell = function(cellIndex) {
     if(this.cells[cellIndex].reveal()) {
         this.gameState = GameState.LOSE;
     } else {
-        this.gameState = GameState.WIN;
+        this.unToggledCells--;
+        if(this.unToggledCells === this.numberOfMines) {
+            this.gameState = GameState.WIN;
+        }
     }
 };
 
 Board.prototype.getGameState = function() {
     return this.gameState;
 };
+
 
 function Cell() {
     this.hasMine = false;

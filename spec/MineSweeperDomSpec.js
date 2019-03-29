@@ -1,5 +1,5 @@
 describe("Testing DOM manipulation", function () {
-    const LENGTH = 2;
+    const LENGTH = 3;
     const CLEAR_CHAR = "";
     const MINE_CHAR = "*";
     const GAME_IN_PROGRESS_MESSAGE = "Game in progress...";
@@ -61,16 +61,17 @@ describe("Testing DOM manipulation", function () {
         expect(cellDOM.innerHTML).toEqual(MINE_CHAR);
     });
 
-    it("given a single cell without a mine, when revealed, player wins", function () {
-        let cellDOM = document.getElementById(TEST_CELL0_ID);
-        let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
+    // it("given a single cell without a mine, when revealed, player wins", function () {
+    //     let cellDOM = document.getElementById(TEST_CELL0_ID);
+    //     let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
+    //
+    //     cellDOM.click();
+    //
+    //     expect(messageDOM.innerHTML).toEqual(GAME_WIN_MESSAGE);
+    //     expect(board.getGameState()).toEqual(GameState.WIN);
+    // });
 
-        cellDOM.click();
-
-        expect(messageDOM.innerHTML).toEqual(GAME_WIN_MESSAGE);
-    });
-
-    it("given a single cell with a mine, when revealed, player loses", function () {
+    it("given a cell with a mine, when revealed, player loses", function () {
         let cellDOM = document.getElementById(TEST_CELL0_ID);
         let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
 
@@ -78,15 +79,25 @@ describe("Testing DOM manipulation", function () {
         cellDOM.click();
 
         expect(messageDOM.innerHTML).toEqual(GAME_LOSE_MESSAGE);
+        expect(board.getGameState()).toEqual(GameState.LOSE);
     });
 
-    it("given cell2 with a mine, when revealed, button has * as text", function () {
+    it("given cell with a mine, when revealed, cell button has * as text", function () {
         let cellDOM = document.getElementById(TEST_CELL1_ID);
 
         board.addMines([1]);
         cellDOM.click();
 
         expect(cellDOM.innerHTML).toEqual(MINE_CHAR);
+    });
+
+    it("given three cells and one mine, when non-mine cell is revealed, game continues", function () {
+        let cellDOM = document.getElementById(TEST_CELL0_ID);
+
+        board.addMines([1]);
+        cellDOM.click();
+
+        expect(board.getGameState()).toEqual(GameState.IN_PROGRESS);
     });
 });
 

@@ -13,7 +13,12 @@
 
             board = new Board(length);
             board.addCells(Cell);
-            board.addMines();
+            /*let arr = [];
+            while(arr.length < 1){
+                let r = Math.floor(Math.random()*length);
+                if(arr.indexOf(r) === -1) arr.push(r);
+            }*/
+            board.addMines([1]);
             let Dom = new DomManipulation();
             Dom.init(board);
 

@@ -18,20 +18,22 @@ DomManipulation.prototype.init = function(board) {
     div.appendChild(gameStateMessage);
 
     cell0.addEventListener("click", () => {
-        if(board.getCells()[0].reveal()) {
+        board.revealCell(0);
+        if(board.getGameState() === GameState.LOSE) {
             cell0.innerHTML = "*";
             gameStateMessage.innerHTML = "Player Loses :(";
-        } else {
+        } else if(board.getGameState() === GameState.WIN) {
             cell0.innerHTML = '';
             gameStateMessage.innerHTML = "Player Wins :)";
         }
     });
 
     cell1.addEventListener("click", () => {
-        if(board.getCells()[1].reveal()) {
+        board.revealCell(1);
+        if(board.getGameState() === GameState.LOSE) {
             cell1.innerHTML = "*";
             gameStateMessage.innerHTML = "Player Loses :(";
-        } else {
+        } else if(board.getGameState() === GameState.WIN) {
             cell1.innerHTML = '';
             gameStateMessage.innerHTML = "Player Wins :)";
         }
