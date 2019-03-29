@@ -28,6 +28,7 @@ describe("Testing DOM manipulation", function () {
     it("when init then have a button with no text", function () {
         const div = document.createElement('div');
         const cell = document.createElement('button');
+        const boardBreak = document.createElement('br');
         const gameStateMessage = document.createElement('b');
         div.id = TEST_DIV_ID;
         cell.id = TEST_CELL_ID;
@@ -35,6 +36,7 @@ describe("Testing DOM manipulation", function () {
         gameStateMessage.innerHTML = GAME_IN_PROGRESS_MESSAGE;
 
         div.appendChild(cell);
+        div.appendChild(boardBreak);
         div.appendChild(gameStateMessage);
 
         expect(document.getElementById(TEST_DIV_ID)).toEqual(div);

@@ -3,6 +3,7 @@ function DomManipulation() {}
 DomManipulation.prototype.init = function(board) {
     const div = document.createElement('div');
     const cell = document.createElement('button');
+    const boardBreak = document.createElement('br');
     const gameStateMessage = document.createElement('b');
     div.id = "GameBoard";
     cell.id = "Cell";
@@ -10,6 +11,7 @@ DomManipulation.prototype.init = function(board) {
     gameStateMessage.innerHTML = "Game in progress...";
 
     div.appendChild(cell);
+    div.appendChild(boardBreak)
     div.appendChild(gameStateMessage);
 
     cell.addEventListener("click", () => {
