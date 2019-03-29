@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minesweeper</title>
+    </head>
+    <body>
+        <script src="src/MineSweeper.js"></script>
+        <script src="src/MineSweeperDom.js"></script>
+        <script>
+            let length = 1;
+            let board;
+            let cell;
+
+            board = new Board(length);
+            cell = new Cell();
+            board.addCells(cell);
+            board.addMines();
+            let Dom = new DomManipulation();
+            Dom.init(board);
+
+        </script>
+    </body>
+</html>
