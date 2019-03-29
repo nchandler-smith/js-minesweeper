@@ -2,17 +2,17 @@ function DomManipulation() {}
 
 DomManipulation.prototype.init = function(board) {
     const div = document.createElement('div');
-    const mineCell = document.createElement('button');
+    const cell = document.createElement('button');
     div.id = "GameBoard";
-    mineCell.id = "MineCell";
+    cell.id = "Cell";
 
-    div.appendChild(mineCell);
+    div.appendChild(cell);
 
-    mineCell.addEventListener("click", () => {
+    cell.addEventListener("click", () => {
         if(board.getCells()[0].reveal()) {
-            mineCell.innerHTML = "*";
+            cell.innerHTML = "*";
         } else {
-            mineCell.innerHTML = '';
+            cell.innerHTML = '';
         }
     });
 
@@ -22,5 +22,5 @@ DomManipulation.prototype.init = function(board) {
 DomManipulation.prototype.kill = function () {
     let div = document.getElementById("GameBoard");
     document.body.removeChild(div);
-}
+};
 
