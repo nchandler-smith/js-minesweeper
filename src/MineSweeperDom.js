@@ -1,28 +1,26 @@
 function DomManipulation() {}
 
-DomManipulation.prototype.init = function(board, cell, numberOfMines) {
-    const form = document.createElement('form');
-    const input = document.createElement('button');
+DomManipulation.prototype.init = function(board) {
+    const div = document.createElement('div');
+    const mineCell = document.createElement('button');
+    div.id = "GameBoard";
+    mineCell.id = "MineCell";
 
+    div.appendChild(mineCell);
 
-    form.id = "GameBoard";
-    input.id = "Cell1";
-
-    const LENGTH = 1;
-    const NUMBER_MINES = numberOfMines;
-    board = new Board(LENGTH);
-
-
-    input.addEventListener("click", () => {
-        // board.revealCell(0)
+    mineCell.addEventListener("click", () => {
         if(board.getCells()[0].reveal()) {
-            input.value = "*";
+            mineCell.value = "*";
+        } else {
+            mineCell.value = '';
         }
-
     });
-    form.appendChild(input);
-    return {
-        form
-    }
+
+    document.body.appendChild(div);
 };
+
+DomManipulation.prototype.kill = function () {
+    let div = document.getElementById("GameBoard");
+    document.body.removeChild(div);
+}
 
