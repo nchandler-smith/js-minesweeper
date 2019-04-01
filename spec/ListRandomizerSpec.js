@@ -34,22 +34,21 @@ describe("Randomizer Tests", function () {
     });
 
     it("Given a length and maximum value return random numbers with no duplicate elements", function() {
-        let arrayLength = 5;
-        let upperBound = 5;
+        const length = 5;
+        const upperBound = 5;
+        const listRandomizer = new ListRandomizer();
 
-        let actual = new ListRandomizer();
+        const actual = listRandomizer.randomizeIndices(length, upperBound);
 
-        const returnSet = actual.randomizeIndices(arrayLength, upperBound);
-
-        expect(returnSet.size).toEqual(arrayLength);
+        expect(actual.size).toEqual(length);
     });
 
-    it("Given a length that exceeds the upper bound return array of upper bound length", function() {
-        let arrayLength = 10;
+    it("Given a length that exceeds the upper bound return random numbers of upper bound length", function() {
+        let length = 10;
         let upperBound = 5;
-        let randomizer = new ListRandomizer();
+        let listRandomizer = new ListRandomizer();
 
-        const actual = randomizer.randomizeIndices(arrayLength, upperBound);
+        const actual = listRandomizer.randomizeIndices(length, upperBound);
 
         expect(actual.size).toEqual(upperBound);
     });
