@@ -1,29 +1,10 @@
-function DomManipulation() {}
+function DomManipulation() {
+}
 
-DomManipulation.prototype.init = function(board) {
-    // init calls the following functions:
-    // buildBoard: creates and appends elements
-    // addListeners: creates the event listeners
-
-    // create gameController?!?!
-
+DomManipulation.prototype.init = function (board) {
 
     const {cellsView, gameStateMessage} = buildBoard();
-
-
-    for (let i = 0; i < cellsView.length; i++) {
-        cellsView[i].addEventListener("click", () => {
-            board.revealCell(i);
-            if(board.getGameState() === GameState.LOSE) {
-                cellsView[i].innerHTML = "*";
-                gameStateMessage.innerHTML = "Player Loses :(";
-            } else if(board.getGameState() === GameState.WIN) {
-                cellsView[i].innerHTML = '';
-                gameStateMessage.innerHTML = "Player Wins :)";
-            }
-        });
-    }
-
+    setEventListeners();
 
     function buildBoard() {
         const div = document.createElement('div');
@@ -48,6 +29,21 @@ DomManipulation.prototype.init = function(board) {
         document.body.appendChild(div);
 
         return {cellsView, gameStateMessage};
+    }
+
+    function setEventListeners() {
+        for (let i = 0; i < cellsView.length; i++) {
+            cellsView[i].addEventListener("click", () => {
+                const gameState = board.revealCell(i);
+                if (gameState === GameState.LOSE) {
+                    cellsView[i].innerHTML = "*";
+                    gameStateMessage.innerHTML = "Player Loses :(";
+                } else if (gameState === GameState.WIN) {
+                    cellsView[i].innerHTML = '';
+                    gameStateMessage.innerHTML = "Player Wins :)";
+                }
+            });
+        }
     }
 };
 

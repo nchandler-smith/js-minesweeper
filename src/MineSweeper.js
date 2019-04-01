@@ -38,12 +38,9 @@ Board.prototype.revealCell = function (cellIndex) {
             this.gameState = GameState.WIN;
         }
     }
-};
 
-Board.prototype.getGameState = function () {
     return this.gameState;
 };
-
 
 function Cell() {
     this.hasMine = false;

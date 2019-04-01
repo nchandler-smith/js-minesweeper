@@ -1,5 +1,5 @@
 describe("Testing DOM manipulation", function () {
-    const LENGTH = 3;
+    const LENGTH = 9;
     const CLEAR_CHAR = "";
     const MINE_CHAR = "*";
     const GAME_IN_PROGRESS_MESSAGE = "Game in progress...";
@@ -8,7 +8,6 @@ describe("Testing DOM manipulation", function () {
     const TEST_DIV_ID = "GameBoard";
     const TEST_CELL0_ID = "Cell0";
     const TEST_CELL1_ID = "Cell1";
-    const TEST_CELL2_ID = "Cell2";
     const GAME_STATE_MESSAGE_ID = "GameState";
 
     let board;
@@ -27,21 +26,20 @@ describe("Testing DOM manipulation", function () {
 
     it("when init then have a button with no text", function () {
         const div = document.createElement('div');
-        const cell0 = document.createElement('button');
-        const cell1 = document.createElement('button');
-        const cell2 = document.createElement('button');
+        div.id = TEST_DIV_ID;
+
+        for (let i = 0; i < LENGTH; i++) {
+            const cell = document.createElement('button');
+            cell.id = "Cell" + i;
+            div.appendChild(cell);
+        }
+
         const boardBreak = document.createElement('br');
         const gameStateMessage = document.createElement('b');
-        div.id = TEST_DIV_ID;
-        cell0.id = TEST_CELL0_ID;
-        cell1.id = TEST_CELL1_ID;
-        cell2.id = TEST_CELL2_ID;
+
         gameStateMessage.id = "GameState";
         gameStateMessage.innerHTML = GAME_IN_PROGRESS_MESSAGE;
 
-        div.appendChild(cell0);
-        div.appendChild(cell1);
-        div.appendChild(cell2);
         div.appendChild(boardBreak);
         div.appendChild(gameStateMessage);
 
@@ -73,7 +71,7 @@ describe("Testing DOM manipulation", function () {
         cellDOM.click();
 
         expect(messageDOM.innerHTML).toEqual(GAME_LOSE_MESSAGE);
-        expect(board.getGameState()).toEqual(GameState.LOSE);
+        expect(board.gameState).toEqual(GameState.LOSE);
     });
 
     it("given cell with a mine, when revealed, cell button has * as text", function () {
@@ -85,13 +83,13 @@ describe("Testing DOM manipulation", function () {
         expect(cellDOM.innerHTML).toEqual(MINE_CHAR);
     });
 
-    it("given three cells and one mine, when non-mine cell is revealed, game continues", function () {
+    it("given multiple non-mine cells and one mine, when a single non-mine cell is revealed, game continues", function () {
         let cellDOM = document.getElementById(TEST_CELL0_ID);
 
         board.addMines([1]);
         cellDOM.click();
 
-        expect(board.getGameState()).toEqual(GameState.IN_PROGRESS);
+        expect(board.gameState).toEqual(GameState.IN_PROGRESS);
     });
 });
 
