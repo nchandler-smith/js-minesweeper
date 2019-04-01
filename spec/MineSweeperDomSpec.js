@@ -8,6 +8,7 @@ describe("Testing DOM manipulation", function () {
     const TEST_DIV_ID = "GameBoard";
     const TEST_CELL0_ID = "Cell0";
     const TEST_CELL1_ID = "Cell1";
+    const TEST_CELL2_ID = "Cell2";
     const GAME_STATE_MESSAGE_ID = "GameState";
 
     let board;
@@ -28,16 +29,19 @@ describe("Testing DOM manipulation", function () {
         const div = document.createElement('div');
         const cell0 = document.createElement('button');
         const cell1 = document.createElement('button');
+        const cell2 = document.createElement('button');
         const boardBreak = document.createElement('br');
         const gameStateMessage = document.createElement('b');
         div.id = TEST_DIV_ID;
         cell0.id = TEST_CELL0_ID;
         cell1.id = TEST_CELL1_ID;
+        cell2.id = TEST_CELL2_ID;
         gameStateMessage.id = "GameState";
         gameStateMessage.innerHTML = GAME_IN_PROGRESS_MESSAGE;
 
         div.appendChild(cell0);
         div.appendChild(cell1);
+        div.appendChild(cell2);
         div.appendChild(boardBreak);
         div.appendChild(gameStateMessage);
 
@@ -52,7 +56,7 @@ describe("Testing DOM manipulation", function () {
         expect(cellDOM.innerHTML).toEqual(CLEAR_CHAR);
     });
 
-    it("given a cell with a mine, when revealed, button has * as text", function () {
+    it("given a cell with builda mine, when revealed, button has * as text", function () {
         let cellDOM = document.getElementById(TEST_CELL0_ID);
 
         board.addMines([0]);

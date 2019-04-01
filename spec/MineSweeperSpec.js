@@ -1,6 +1,6 @@
 describe("Mine Sweeper Tests", function () {
     describe("Game Board Tests", function () {
-        const length = 1;
+        let length = 9;
         const cellLocation = 0;
         let board;
 
@@ -22,6 +22,10 @@ describe("Mine Sweeper Tests", function () {
         });
 
         it("given remaining unrevealed cells equals mines then game state is WIN", function () {
+            const specialLength = 1;
+            board = new Board(specialLength);
+            board.addCells(Cell);
+
             board.revealCell(cellLocation);
             expect(board.getGameState()).toEqual(GameState.WIN);
         });
@@ -35,8 +39,8 @@ describe("Mine Sweeper Tests", function () {
         });
 
         it("given random location of mines addMines places number of mines equal to number of locations", function () {
-            const newLength = 2;
-            board = new Board(newLength);
+            const specialLength = 2;
+            board = new Board(specialLength);
             board.addCells(Cell);
 
             const numberOfMines = 1;
@@ -48,6 +52,13 @@ describe("Mine Sweeper Tests", function () {
             board.addMines(randomNumbers);
 
             expect(board.numberOfMines).toEqual(numberOfMines);
+        });
+
+        it("given empty cell reveled when empty cells remain unrevealed then game state equals In Progress", function () {
+            board.revealCell(0);
+            const gameState = board.getGameState();
+
+            expect(gameState).toEqual(GameState.IN_PROGRESS);
         });
     });
 
