@@ -61,16 +61,6 @@ describe("Testing DOM manipulation", function () {
         expect(cellDOM.innerHTML).toEqual(MINE_CHAR);
     });
 
-    // it("given a single cell without a mine, when revealed, player wins", function () {
-    //     let cellDOM = document.getElementById(TEST_CELL0_ID);
-    //     let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
-    //
-    //     cellDOM.click();
-    //
-    //     expect(messageDOM.innerHTML).toEqual(GAME_WIN_MESSAGE);
-    //     expect(board.getGameState()).toEqual(GameState.WIN);
-    // });
-
     it("given a cell with a mine, when revealed, player loses", function () {
         let cellDOM = document.getElementById(TEST_CELL0_ID);
         let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
