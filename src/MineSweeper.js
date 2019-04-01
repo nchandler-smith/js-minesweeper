@@ -8,42 +8,51 @@ function Board(length) {
     this.length = length;
     this.cells = [];
     this.gameState = GameState.IN_PROGRESS;
+    this.unToggledCells = length;
+    this.numberOfMines = 0;
 }
 
-Board.prototype.addCells = function(cell) {
-    for(let i = 0; i < Math.pow(this.length, 2); i++) {
-        this.cells.push(cell);
+Board.prototype.addCells = function (cellClass) {
+    for (let i = 0; i < this.length; i++) {
+        this.cells.push(new cellClass());
     }
 };
 
-Board.prototype.getCells = function() {
+Board.prototype.getCells = function () {
     return this.cells;
 };
 
-Board.prototype.addMines = function() {
-    this.cells[0].placeMine();
+Board.prototype.addMines = function (indices) {
+    indices.forEach(number => {
+        this.cells[number].placeMine();
+        this.numberOfMines++;
+    });
 };
 
-Board.prototype.revealCell = function(cellIndex) {
-    if(this.cells[cellIndex].reveal()) {
+Board.prototype.revealCell = function (cellIndex) {
+    if (this.cells[cellIndex].reveal()) {
         this.gameState = GameState.LOSE;
     } else {
-        this.gameState = GameState.WIN;
+        this.unToggledCells--;
+        if (this.unToggledCells === this.numberOfMines) {
+            this.gameState = GameState.WIN;
+        }
     }
 };
 
-Board.prototype.getGameState = function() {
+Board.prototype.getGameState = function () {
     return this.gameState;
 };
+
 
 function Cell() {
     this.hasMine = false;
 
-    Cell.prototype.reveal = function() {
+    Cell.prototype.reveal = function () {
         return this.hasMine;
     };
 
-    Cell.prototype.placeMine = function() {
+    Cell.prototype.placeMine = function () {
         this.hasMine = true;
     };
 }

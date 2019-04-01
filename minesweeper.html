@@ -7,15 +7,18 @@
     <body>
         <script src="src/MineSweeper.js"></script>
         <script src="src/MineSweeperDom.js"></script>
+        <script src="src/ListRandomizer.js"></script>
         <script>
-            let length = 1;
-            let board;
-            let cell;
+            const length = 2;
+            const board = new Board(length);
+            const listRandomizer = new ListRandomizer();
+            const numberOfMines = 1;
 
-            board = new Board(length);
-            cell = new Cell();
-            board.addCells(cell);
-            board.addMines();
+            board.addCells(Cell);
+
+            const mineIndices = listRandomizer.randomizeIndices(numberOfMines, length);
+
+            board.addMines(mineIndices);
             let Dom = new DomManipulation();
             Dom.init(board);
 
