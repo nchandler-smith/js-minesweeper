@@ -18,6 +18,7 @@ DomManipulation.prototype.init = function (board) {
             for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                 const cell = document.createElement('button');
                 cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
+                cell.className = "Cell";
                 div.appendChild(cell);
                 cellsView.push(cell)
             }
@@ -31,8 +32,15 @@ DomManipulation.prototype.init = function (board) {
         gameStateMessage.id = "GameState";
         gameStateMessage.innerHTML = "Game in progress...";
 
+        const gameResetButton = document.createElement('button');
+        gameResetButton.id = "ResetGame";
+        gameResetButton.innerHTML = "Reset Game";
+        gameResetButton.style.visibility = "hidden";
+
         div.appendChild(boardBreak);
         div.appendChild(gameStateMessage);
+        div.appendChild(boardBreak);
+        div.appendChild(gameResetButton);
         document.body.appendChild(div);
 
         return {cellsView, gameStateMessage};
@@ -46,8 +54,11 @@ DomManipulation.prototype.init = function (board) {
                 if (gameState === GameState.LOSE) {
                     cellsView[i].innerHTML = "*";
                     gameStateMessage.innerHTML = "Player Loses :(";
+                    cellsView.forEach(element => element.disabled = true);
+                    document.getElementById("ResetGame").style.visibility = "visible";
                 } else if (gameState === GameState.WIN) {
                     gameStateMessage.innerHTML = "Player Wins :)";
+                    document.getElementById("ResetGame").style.visibility = "visible";
                 }
             });
         }
