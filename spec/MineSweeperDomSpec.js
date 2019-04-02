@@ -11,6 +11,8 @@ describe("Testing DOM manipulation", function () {
     const TEST_CELL0_ID = "Cell0";
     const TEST_CELL1_ID = "Cell1";
     const GAME_STATE_MESSAGE_ID = "GameState";
+    const GAME_RESET_BUTTON_TEXT = "Reset Game";
+    const CELL_BUTTON_CLASS_NAME = "Cell";
 
     let board;
     let dom;
@@ -22,11 +24,24 @@ describe("Testing DOM manipulation", function () {
         dom.init(board);
     });
 
-    afterEach(function () {
-        dom.kill();
-    });
+    function rollOutWinningGame() {
+        const cellList = Array.from(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME));
+        const mineLocations = [0];
+        board.addMines(mineLocations);
 
-    it("when init then have a button with no text", function () {
+        const cellsWithoutMines = cellList.filter(element => element.id !== TEST_CELL0_ID);
+        cellsWithoutMines.forEach(cell => cell.click());
+    }
+
+    function rollOutLosingGame() {
+        const cellWithMine = document.getElementById(TEST_CELL0_ID);
+        const mineLocations = [0];
+
+        board.addMines(mineLocations);
+        cellWithMine.click();
+    }
+
+    function createFreshBoard() {
         const div = document.createElement('div');
         const boardBreak = document.createElement('br');
         div.id = TEST_DIV_ID;
@@ -35,6 +50,7 @@ describe("Testing DOM manipulation", function () {
             for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                 const cell = document.createElement('button');
                 cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
+                cell.className = CELL_BUTTON_CLASS_NAME;
                 div.appendChild(cell);
             }
             const rowBreak = document.createElement('br');
@@ -42,53 +58,57 @@ describe("Testing DOM manipulation", function () {
         }
 
         const gameStateMessage = document.createElement('t');
-
         gameStateMessage.id = "GameState";
         gameStateMessage.innerHTML = GAME_IN_PROGRESS_MESSAGE;
 
+        const gameResetButton = document.createElement('button');
+        gameResetButton.id = "ResetGame";
+        gameResetButton.innerHTML = GAME_RESET_BUTTON_TEXT;
+        gameResetButton.style.visibility = "hidden";
+
+
         div.appendChild(boardBreak);
         div.appendChild(gameStateMessage);
+        div.appendChild(boardBreak);
+        div.appendChild(gameResetButton);
 
-        expect(document.getElementById(GAME_STATE_MESSAGE_ID)).toEqual(gameStateMessage);
-        expect(document.getElementsByTagName('button').length).toEqual(LENGTH);
+        return div;
+    }
+
+    afterEach(function () {
+        dom.kill();
+    });
+
+    it("should have a grid of cells as a gameboard", function () {
+        const div = createFreshBoard();
+
         expect(document.getElementById(TEST_DIV_ID)).toEqual(div);
     });
 
     it("given a cell without a mine, when revealed, button has empty text", function () {
-        let cellDOM = document.getElementById(TEST_CELL0_ID);
+        let cellWithoutMine = document.getElementById(TEST_CELL0_ID);
 
-        cellDOM.click();
+        cellWithoutMine.click();
 
-        expect(cellDOM.innerHTML).toEqual(CLEAR_CHAR);
+        expect(cellWithoutMine.innerHTML).toEqual(CLEAR_CHAR);
     });
 
-    it("given a cell with build a mine, when revealed, button has * as text", function () {
-        let cellDOM = document.getElementById(TEST_CELL0_ID);
+    it("given a cell with a mine, when revealed, button has * as text", function () {
+        let cellWithMine = document.getElementById(TEST_CELL0_ID);
 
         board.addMines([0]);
-        cellDOM.click();
+        cellWithMine.click();
 
-        expect(cellDOM.innerHTML).toEqual(MINE_CHAR);
+        expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
     });
 
     it("given a cell with a mine, when revealed, player loses", function () {
-        let cellDOM = document.getElementById(TEST_CELL0_ID);
         let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
 
-        board.addMines([0]);
-        cellDOM.click();
+        rollOutLosingGame();
 
         expect(messageDOM.innerHTML).toEqual(GAME_LOSE_MESSAGE);
         expect(board.gameState).toEqual(GameState.LOSE);
-    });
-
-    it("given cell with a mine, when revealed, cell button has * as text", function () {
-        let cellDOM = document.getElementById(TEST_CELL1_ID);
-
-        board.addMines([1]);
-        cellDOM.click();
-
-        expect(cellDOM.innerHTML).toEqual(MINE_CHAR);
     });
 
     it("given multiple non-mine cells and one mine, when a single non-mine cell is revealed, game continues", function () {
@@ -106,6 +126,57 @@ describe("Testing DOM manipulation", function () {
         cellDOM.click();
 
         expect(cellDOM.disabled).toEqual(true);
+    });
+
+    it("given player loses, when game ends, then all buttons are disabled", function () {
+        const cellElements = Array.from(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME));
+
+        rollOutLosingGame();
+
+        const allCellsDisabled = cellElements.every(element => element.disabled === true);
+        expect(allCellsDisabled).toBeTruthy();
+    });
+
+    it("given mine exists and player wins, when game ends, then all buttons are disabled", function () {
+        const cellElements = Array.from(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME));
+
+        rollOutWinningGame();
+
+        const allCellsDisabled = cellElements.every(element => element.disabled === true);
+        expect(allCellsDisabled).toBeTruthy();
+    });
+
+    it("given player loses, then reset button is visible", function () {
+        const resetButton = document.getElementById("ResetGame");
+
+        rollOutLosingGame();
+
+        expect(resetButton.style.visibility).toEqual("visible");
+    });
+
+    it("given player wins, then reset button is visible", function () {
+        const resetButton = document.getElementById("ResetGame");
+
+        rollOutWinningGame();
+
+        expect(resetButton.style.visibility).toEqual("visible");
+    });
+
+    it("when all cells without mines are revealed , then player wins", function () {
+        let messageDOM = document.getElementById(GAME_STATE_MESSAGE_ID);
+
+        rollOutWinningGame();
+
+        expect(messageDOM.innerHTML).toEqual(GAME_WIN_MESSAGE);
+        expect(board.gameState).toEqual(GameState.WIN);
+    });
+
+    it("given game ends, then all mines are revealed", function () {
+        let cellWithMine = document.getElementById(TEST_CELL0_ID);
+
+        rollOutWinningGame();
+
+        expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
     });
 });
 
