@@ -3,7 +3,7 @@ function DomManipulation() {
 
 DomManipulation.prototype.init = function (board) {
 
-    const {cellsView, gameStateMessage} = buildBoard();
+    const {cellsView, gameStateMessage, gameResetButton} = buildBoard();
     setEventListeners();
 
     function buildBoard() {
@@ -14,8 +14,8 @@ DomManipulation.prototype.init = function (board) {
         let cellsView = [];
         const boardBreak = document.createElement('br');
 
-        for(let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
-            for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
+        for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
+            for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                 const cell = document.createElement('button');
                 cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
                 cell.className = "Cell";
@@ -43,7 +43,7 @@ DomManipulation.prototype.init = function (board) {
         div.appendChild(gameResetButton);
         document.body.appendChild(div);
 
-        return {cellsView, gameStateMessage};
+        return {cellsView, gameStateMessage, gameResetButton};
     }
 
     function setEventListeners() {
@@ -51,19 +51,27 @@ DomManipulation.prototype.init = function (board) {
             cellsView[i].addEventListener("click", () => {
                 const gameState = board.revealCell(i);
                 cellsView[i].disabled = true;
-                if (gameState === GameState.LOSE) {
-                    cellsView[i].innerHTML = "*";
-                    gameStateMessage.innerHTML = "Player Loses :(";
+                if (gameState !== GameState.IN_PROGRESS) {
+                    showMines();
+                    updateGameStateMessage(gameState);
                     cellsView.forEach(element => element.disabled = true);
-                    document.getElementById("ResetGame").style.visibility = "visible";
-                } else if (gameState === GameState.WIN) {
-                    gameStateMessage.innerHTML = "Player Wins :)";
-                    document.getElementById("ResetGame").style.visibility = "visible";
-                    cellsView.forEach(element => element.disabled = true);
+                    gameResetButton.style.visibility = "visible";
                 }
             });
         }
     }
+
+    function showMines(){
+        const mineIndices = board.getMines();
+        mineIndices.forEach(index => cellsView[index].innerHTML = "*");
+    };
+
+    function updateGameStateMessage(gameState){
+        if(gameState === GameState.LOSE)
+            gameStateMessage.innerHTML = "Player Loses :(";
+        else if(gameState === GameState.WIN)
+            gameStateMessage.innerHTML = "Player Wins :)";
+    };
 };
 
 DomManipulation.prototype.kill = function () {

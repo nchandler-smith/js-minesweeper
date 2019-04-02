@@ -166,5 +166,13 @@ describe("Testing DOM manipulation", function () {
         expect(messageDOM.innerHTML).toEqual(GAME_WIN_MESSAGE);
         expect(board.gameState).toEqual(GameState.WIN);
     });
+
+    it("given game ends, then all mines are revealed", function () {
+        let cellWithMine = document.getElementById(TEST_CELL0_ID);
+
+        rollOutWinningGame();
+
+        expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
+    });
 });
 

@@ -61,6 +61,14 @@ describe("Mine Sweeper Tests", function () {
 
             expect(gameState).toEqual(GameState.IN_PROGRESS);
         });
+
+        it("given cells with mines, getMines returns indexes of cells containing a mine", function () {
+            let mineLocations = [0];
+            board.addMines(mineLocations);
+            const mineIndices = board.getMines();
+
+            expect(mineIndices).toEqual(mineLocations);
+        });
     });
 
     describe("Cell Tests", function () {

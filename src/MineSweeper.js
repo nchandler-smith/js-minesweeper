@@ -10,6 +10,7 @@ function Board(length) {
     this.gameState = GameState.IN_PROGRESS;
     this.unToggledCells = length;
     this.numberOfMines = 0;
+    this.mineIndices = [];
 }
 
 Board.prototype.addCells = function (cellClass) {
@@ -26,6 +27,7 @@ Board.prototype.addMines = function (indices) {
     indices.forEach(number => {
         this.cells[number].placeMine();
         this.numberOfMines++;
+        this.mineIndices.push(number);
     });
 };
 
@@ -40,6 +42,10 @@ Board.prototype.revealCell = function (cellIndex) {
     }
 
     return this.gameState;
+};
+
+Board.prototype.getMines = function() {
+    return this.mineIndices;
 };
 
 function Cell() {
