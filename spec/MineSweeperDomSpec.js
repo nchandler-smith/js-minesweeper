@@ -26,7 +26,11 @@ describe("Testing DOM manipulation", function () {
 
     function rollOutWinningGame() {
         const cellList = Array.from(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME));
-        cellList.forEach(cell => cell.click());
+        const mineLocations = [0];
+        board.addMines(mineLocations);
+
+        const cellsWithoutMines = cellList.filter(element => element.id !== TEST_CELL0_ID);
+        cellsWithoutMines.forEach(cell => cell.click());
     };
 
     function rollOutLosingGame() {
@@ -124,6 +128,15 @@ describe("Testing DOM manipulation", function () {
         const cellElements = Array.from(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME));
 
         rollOutLosingGame();
+
+        const allCellsDisabled = cellElements.every(element => element.disabled === true);
+        expect(allCellsDisabled).toBeTruthy();
+    });
+
+    it("given mine exists and player wins, when game ends, then all buttons are disabled", function () {
+        const cellElements = Array.from(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME));
+
+        rollOutWinningGame();
 
         const allCellsDisabled = cellElements.every(element => element.disabled === true);
         expect(allCellsDisabled).toBeTruthy();

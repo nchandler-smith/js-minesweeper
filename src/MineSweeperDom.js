@@ -59,6 +59,7 @@ DomManipulation.prototype.init = function (board) {
                 } else if (gameState === GameState.WIN) {
                     gameStateMessage.innerHTML = "Player Wins :)";
                     document.getElementById("ResetGame").style.visibility = "visible";
+                    cellsView.forEach(element => element.disabled = true);
                 }
             });
         }
