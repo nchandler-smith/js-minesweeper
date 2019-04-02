@@ -31,7 +31,7 @@ describe("Testing DOM manipulation", function () {
 
         const cellsWithoutMines = cellList.filter(element => element.id !== TEST_CELL0_ID);
         cellsWithoutMines.forEach(cell => cell.click());
-    };
+    }
 
     function rollOutLosingGame() {
         const cellWithMine = document.getElementById(TEST_CELL0_ID);
@@ -39,13 +39,9 @@ describe("Testing DOM manipulation", function () {
 
         board.addMines(mineLocations);
         cellWithMine.click();
-    };
+    }
 
-    afterEach(function () {
-        dom.kill();
-    });
-
-    it("should have a grid of cells as a gameboard", function () {
+    function createFreshBoard() {
         const div = document.createElement('div');
         const boardBreak = document.createElement('br');
         div.id = TEST_DIV_ID;
@@ -76,8 +72,16 @@ describe("Testing DOM manipulation", function () {
         div.appendChild(boardBreak);
         div.appendChild(gameResetButton);
 
-        expect(document.getElementById(GAME_STATE_MESSAGE_ID)).toEqual(gameStateMessage);
-        expect(document.getElementsByClassName(CELL_BUTTON_CLASS_NAME).length).toEqual(LENGTH);
+        return div;
+    }
+
+    afterEach(function () {
+        dom.kill();
+    });
+
+    it("should have a grid of cells as a gameboard", function () {
+        const div = createFreshBoard();
+
         expect(document.getElementById(TEST_DIV_ID)).toEqual(div);
     });
 
@@ -173,6 +177,16 @@ describe("Testing DOM manipulation", function () {
         rollOutWinningGame();
 
         expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
+    });
+
+    it("given game ends, when rest game button pressed then new game starts", function () {
+        const resetButton = document.getElementById("ResetGame");
+
+        rollOutWinningGame();
+        resetButton.click();
+
+        const div = createFreshBoard();
+        expect(document.getElementById(TEST_DIV_ID)).toEqual(div);
     });
 });
 

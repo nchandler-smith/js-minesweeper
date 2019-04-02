@@ -4,7 +4,8 @@ function DomManipulation() {
 DomManipulation.prototype.init = function (board) {
 
     const {cellsView, gameStateMessage, gameResetButton} = buildBoard();
-    setEventListeners();
+    setGameCellEventListeners();
+    setResetGameEventListener();
 
     function buildBoard() {
         const HEIGHT = 3;
@@ -46,7 +47,7 @@ DomManipulation.prototype.init = function (board) {
         return {cellsView, gameStateMessage, gameResetButton};
     }
 
-    function setEventListeners() {
+    function setGameCellEventListeners() {
         for (let i = 0; i < cellsView.length; i++) {
             cellsView[i].addEventListener("click", () => {
                 const gameState = board.revealCell(i);
@@ -61,17 +62,24 @@ DomManipulation.prototype.init = function (board) {
         }
     }
 
+    function setResetGameEventListener() {
+        gameResetButton.addEventListener("click", () => {
+            DomManipulation.prototype.kill();
+            DomManipulation.prototype.init();
+        });
+    }
+
     function showMines(){
         const mineIndices = board.getMines();
         mineIndices.forEach(index => cellsView[index].innerHTML = "*");
-    };
+    }
 
     function updateGameStateMessage(gameState){
         if(gameState === GameState.LOSE)
             gameStateMessage.innerHTML = "Player Loses :(";
         else if(gameState === GameState.WIN)
             gameStateMessage.innerHTML = "Player Wins :)";
-    };
+    }
 };
 
 DomManipulation.prototype.kill = function () {
