@@ -64,8 +64,7 @@ DomManipulation.prototype.init = function (board) {
 
     function setResetGameEventListener() {
         gameResetButton.addEventListener("click", () => {
-            DomManipulation.prototype.kill();
-            DomManipulation.prototype.init();
+            window.location.reload();
         });
     }
 

@@ -178,15 +178,5 @@ describe("Testing DOM manipulation", function () {
 
         expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
     });
-
-    it("given game ends, when rest game button pressed then new game starts", function () {
-        const resetButton = document.getElementById("ResetGame");
-
-        rollOutWinningGame();
-        resetButton.click();
-
-        const div = createFreshBoard();
-        expect(document.getElementById(TEST_DIV_ID)).toEqual(div);
-    });
 });
 
