@@ -1,45 +1,57 @@
-function DomManipulation() {}
+function DomManipulation() {
+}
 
-DomManipulation.prototype.init = function(board) {
-    const div = document.createElement('div');
-    const cell0 = document.createElement('button');
-    const cell1 = document.createElement('button');
-    const boardBreak = document.createElement('br');
-    const gameStateMessage = document.createElement('b');
-    div.id = "GameBoard";
-    cell0.id = "Cell0";
-    cell1.id = "Cell1";
-    gameStateMessage.id = "GameState";
-    gameStateMessage.innerHTML = "Game in progress...";
+DomManipulation.prototype.init = function (board) {
 
-    div.appendChild(cell0);
-    div.appendChild(cell1);
-    div.appendChild(boardBreak);
-    div.appendChild(gameStateMessage);
+    const {cellsView, gameStateMessage} = buildBoard();
+    setEventListeners();
 
-    cell0.addEventListener("click", () => {
-        board.revealCell(0);
-        if(board.getGameState() === GameState.LOSE) {
-            cell0.innerHTML = "*";
-            gameStateMessage.innerHTML = "Player Loses :(";
-        } else if(board.getGameState() === GameState.WIN) {
-            cell0.innerHTML = '';
-            gameStateMessage.innerHTML = "Player Wins :)";
+    function buildBoard() {
+        const HEIGHT = 3;
+        const WIDTH = 3;
+
+        const div = document.createElement('div');
+        let cellsView = [];
+        const boardBreak = document.createElement('br');
+
+        for(let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
+            for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
+                const cell = document.createElement('button');
+                cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
+                div.appendChild(cell);
+                cellsView.push(cell)
+            }
+            const rowBreak = document.createElement('br');
+            div.appendChild(rowBreak);
         }
-    });
 
-    cell1.addEventListener("click", () => {
-        board.revealCell(1);
-        if(board.getGameState() === GameState.LOSE) {
-            cell1.innerHTML = "*";
-            gameStateMessage.innerHTML = "Player Loses :(";
-        } else if(board.getGameState() === GameState.WIN) {
-            cell1.innerHTML = '';
-            gameStateMessage.innerHTML = "Player Wins :)";
+        const gameStateMessage = document.createElement('t');
+        div.id = "GameBoard";
+
+        gameStateMessage.id = "GameState";
+        gameStateMessage.innerHTML = "Game in progress...";
+
+        div.appendChild(boardBreak);
+        div.appendChild(gameStateMessage);
+        document.body.appendChild(div);
+
+        return {cellsView, gameStateMessage};
+    }
+
+    function setEventListeners() {
+        for (let i = 0; i < cellsView.length; i++) {
+            cellsView[i].addEventListener("click", () => {
+                const gameState = board.revealCell(i);
+                cellsView[i].disabled = true;
+                if (gameState === GameState.LOSE) {
+                    cellsView[i].innerHTML = "*";
+                    gameStateMessage.innerHTML = "Player Loses :(";
+                } else if (gameState === GameState.WIN) {
+                    gameStateMessage.innerHTML = "Player Wins :)";
+                }
+            });
         }
-    });
-
-    document.body.appendChild(div);
+    }
 };
 
 DomManipulation.prototype.kill = function () {

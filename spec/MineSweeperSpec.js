@@ -1,6 +1,6 @@
 describe("Mine Sweeper Tests", function () {
     describe("Game Board Tests", function () {
-        const length = 1;
+        let length = 9;
         const cellLocation = 0;
         let board;
 
@@ -16,27 +16,31 @@ describe("Mine Sweeper Tests", function () {
         it("given cell with mine when reveal then game state is LOSE", function () {
             let mineLocation = 0;
             board.addMines([mineLocation]);
-            board.revealCell(cellLocation);
+            const gameState = board.revealCell(cellLocation);
 
-            expect(board.getGameState()).toEqual(GameState.LOSE);
+            expect(gameState).toEqual(GameState.LOSE);
         });
 
         it("given remaining unrevealed cells equals mines then game state is WIN", function () {
-            board.revealCell(cellLocation);
-            expect(board.getGameState()).toEqual(GameState.WIN);
+            const specialLength = 1;
+            board = new Board(specialLength);
+            board.addCells(Cell);
+
+            const gameState = board.revealCell(cellLocation);
+            expect(gameState).toEqual(GameState.WIN);
         });
 
         it("given location of mines addMines places mines in those locations", function () {
             let mineLocation = 0;
             board.addMines([mineLocation]);
-            board.revealCell(mineLocation);
+            const gameState = board.revealCell(cellLocation);
 
-            expect(board.getGameState()).toEqual(GameState.LOSE);
+            expect(gameState).toEqual(GameState.LOSE);
         });
 
         it("given random location of mines addMines places number of mines equal to number of locations", function () {
-            const newLength = 2;
-            board = new Board(newLength);
+            const specialLength = 2;
+            board = new Board(specialLength);
             board.addCells(Cell);
 
             const numberOfMines = 1;
@@ -48,6 +52,14 @@ describe("Mine Sweeper Tests", function () {
             board.addMines(randomNumbers);
 
             expect(board.numberOfMines).toEqual(numberOfMines);
+        });
+
+        it("given empty cell reveled when empty cells remain unrevealed then game state equals In Progress", function () {
+            const cellLocation = 0;
+
+            const gameState = board.revealCell(cellLocation);
+
+            expect(gameState).toEqual(GameState.IN_PROGRESS);
         });
     });
 
