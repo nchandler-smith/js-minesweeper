@@ -28,7 +28,18 @@ Board.prototype.addMines = function (indices) {
         this.cells[number].placeMine();
         this.numberOfMines++;
         this.mineIndices.push(number);
+        getAdjacentIndices(number, this.length).forEach(index => this.cells[index].setAdjacentMines(1));
     });
+
+    function getAdjacentIndices(cellIndex, length) {
+        let adjacentIndices = [];
+
+        adjacentIndices.push(cellIndex + 1);
+        adjacentIndices.push(Math.sqrt(length));
+        adjacentIndices.push(Math.sqrt(length) + 1);
+
+        return adjacentIndices;
+    }
 };
 
 Board.prototype.revealCell = function (cellIndex) {
@@ -44,12 +55,13 @@ Board.prototype.revealCell = function (cellIndex) {
     return this.gameState;
 };
 
-Board.prototype.getMines = function() {
+Board.prototype.getMines = function () {
     return this.mineIndices;
 };
 
 function Cell() {
     this.hasMine = false;
+    this.adjacentMines = 0;
 
     Cell.prototype.reveal = function () {
         return this.hasMine;
@@ -57,6 +69,14 @@ function Cell() {
 
     Cell.prototype.placeMine = function () {
         this.hasMine = true;
+    };
+
+    Cell.prototype.setAdjacentMines = function (numberOfMines) {
+        this.adjacentMines = numberOfMines;
+    };
+
+    Cell.prototype.getAdjacentMines = function () {
+        return this.adjacentMines;
     };
 }
 

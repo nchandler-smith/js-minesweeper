@@ -39,10 +39,6 @@ describe("Mine Sweeper Tests", function () {
         });
 
         it("given random location of mines addMines places number of mines equal to number of locations", function () {
-            const specialLength = 2;
-            board = new Board(specialLength);
-            board.addCells(Cell);
-
             const numberOfMines = 1;
             const upperBound = 2;
             const listRandomizer = new ListRandomizer();
@@ -69,6 +65,19 @@ describe("Mine Sweeper Tests", function () {
 
             expect(mineIndices).toEqual(mineLocations);
         });
+
+        it("given a single mine added, cells adjacent to mine have one adjacent mine", function() {
+            let mineLocations = [0];
+            board.addMines(mineLocations);
+
+            let adjacentCell1 = board.getCells()[1];
+            let adjacentCell2 = board.getCells()[3];
+            let adjacentCell3 = board.getCells()[4];
+
+            expect(adjacentCell1.getAdjacentMines()).toEqual(1);
+            expect(adjacentCell2.getAdjacentMines()).toEqual(1);
+            expect(adjacentCell3.getAdjacentMines()).toEqual(1);
+        });
     });
 
     describe("Cell Tests", function () {
@@ -82,8 +91,14 @@ describe("Mine Sweeper Tests", function () {
         });
 
         it("given mine in cell when reveal then hit", function () {
-            cell.placeMine([0]);
+            cell.placeMine();
             expect(cell.reveal()).toBeTruthy();
+        });
+
+        it("given cell with adjacent mines, cell adjacent number of adjacent mines", function() {
+            cell.setAdjacentMines(1);
+            const adjacentMines = cell.getAdjacentMines();
+            expect(adjacentMines).toEqual(1);
         });
     });
 });
