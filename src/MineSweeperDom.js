@@ -1,13 +1,14 @@
 function DomManipulation() {
+    this.GAME_SPACE_ID = "GameSpace";
 }
 
 DomManipulation.prototype.init = function (board) {
 
-    const {cellsView, gameStateMessage, gameResetButton} = buildGame();
+    const {cellsView, gameStateMessage, gameResetButton} = buildGame(this);
     setGameCellEventListeners();
     setResetGameEventListener();
 
-    function buildGame() {
+    function buildGame(scope) {
         let cellsView = [];
         const HEIGHT = 3;
         const WIDTH = 3;
@@ -58,14 +59,14 @@ DomManipulation.prototype.init = function (board) {
             return gameResetButton;
         }
 
-        function createGameSpace() {
+        function createGameSpace(scope) {
             const div = document.createElement('div');
-            div.id = "GameSpace";
+            div.id = scope.GAME_SPACE_ID;
 
             return div;
         }
 
-        const gameSpace = createGameSpace();
+        const gameSpace = createGameSpace(scope);
         const gameBoard = createGameBoard();
         const boardBreak = createBoardBreak();
         const gameStateMessage = createGameStateMessage();
@@ -116,7 +117,7 @@ DomManipulation.prototype.init = function (board) {
 };
 
 DomManipulation.prototype.kill = function () {
-    let div = document.getElementById("GameSpace");
+    let div = document.getElementById(this.GAME_SPACE_ID);
     document.body.removeChild(div);
 };
 
