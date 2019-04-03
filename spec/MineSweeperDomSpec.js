@@ -42,19 +42,19 @@ describe("Testing DOM manipulation", function () {
     }
 
     function createFreshBoard() {
-        const div = document.createElement('div');
+        const gameSpace = document.createElement('div');
         const boardBreak = document.createElement('br');
-        div.id = TEST_DIV_ID;
+        gameSpace.id = TEST_DIV_ID;
 
         for(let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
             for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                 const cell = document.createElement('button');
                 cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
                 cell.className = CELL_BUTTON_CLASS_NAME;
-                div.appendChild(cell);
+                gameSpace.appendChild(cell);
             }
             const rowBreak = document.createElement('br');
-            div.appendChild(rowBreak);
+            gameSpace.appendChild(rowBreak);
         }
 
         const gameStateMessage = document.createElement('t');
@@ -67,12 +67,12 @@ describe("Testing DOM manipulation", function () {
         gameResetButton.style.visibility = "hidden";
 
 
-        div.appendChild(boardBreak);
-        div.appendChild(gameStateMessage);
-        div.appendChild(boardBreak);
-        div.appendChild(gameResetButton);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameStateMessage);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameResetButton);
 
-        return div;
+        return gameSpace;
     }
 
     afterEach(function () {

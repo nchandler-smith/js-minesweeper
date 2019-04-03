@@ -8,41 +8,64 @@ DomManipulation.prototype.init = function (board) {
     setResetGameEventListener();
 
     function buildBoard() {
+        let cellsView = [];
         const HEIGHT = 3;
         const WIDTH = 3;
 
-        const div = document.createElement('div');
-        let cellsView = [];
-        const boardBreak = document.createElement('br');
-
-        for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
-            for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
-                const cell = document.createElement('button');
-                cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
-                cell.className = "Cell";
-                div.appendChild(cell);
-                cellsView.push(cell)
+        function createCellGrid() {
+            for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
+                for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
+                    const cell = createCell(heightIndex, widthIndex);
+                    gameSpace.appendChild(cell);
+                    cellsView.push(cell);
+                }
+                gameSpace.appendChild(createBoardBreak());
             }
-            const rowBreak = document.createElement('br');
-            div.appendChild(rowBreak);
         }
 
-        const gameStateMessage = document.createElement('t');
-        div.id = "GameBoard";
+        function createCell(heightIndex, widthIndex) {
+            const cell = document.createElement('button');
+            cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
+            cell.className = "Cell";
+            return cell;
+        }
 
-        gameStateMessage.id = "GameState";
-        gameStateMessage.innerHTML = "Game in progress...";
+        function createBoardBreak() {
+            return document.createElement('br');
+        }
 
-        const gameResetButton = document.createElement('button');
-        gameResetButton.id = "ResetGame";
-        gameResetButton.innerHTML = "Reset Game";
-        gameResetButton.style.visibility = "hidden";
+        function createGameStateMessage() {
+            const gameStateMessage = document.createElement('t');
+            gameStateMessage.id = "GameState";
+            gameStateMessage.innerHTML = "Game in progress...";
+            return gameStateMessage;
+        }
 
-        div.appendChild(boardBreak);
-        div.appendChild(gameStateMessage);
-        div.appendChild(boardBreak);
-        div.appendChild(gameResetButton);
-        document.body.appendChild(div);
+        function createGameResetButton() {
+            const gameResetButton = document.createElement('button');
+            gameResetButton.id = "ResetGame";
+            gameResetButton.innerHTML = "Reset Game";
+            gameResetButton.style.visibility = "hidden";
+            return gameResetButton;
+        }
+
+        function createGameSpace() {
+            const div = document.createElement('div');
+            div.id = "GameBoard";
+            return div;
+        }
+
+        const gameSpace = createGameSpace();
+        createCellGrid();
+        const boardBreak = createBoardBreak();
+        const gameStateMessage = createGameStateMessage();
+        const gameResetButton = createGameResetButton();
+
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameStateMessage);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameResetButton);
+        document.body.appendChild(gameSpace);
 
         return {cellsView, gameStateMessage, gameResetButton};
     }
@@ -68,15 +91,15 @@ DomManipulation.prototype.init = function (board) {
         });
     }
 
-    function showMines(){
+    function showMines() {
         const mineIndices = board.getMines();
         mineIndices.forEach(index => cellsView[index].innerHTML = "*");
     }
 
-    function updateGameStateMessage(gameState){
-        if(gameState === GameState.LOSE)
+    function updateGameStateMessage(gameState) {
+        if (gameState === GameState.LOSE)
             gameStateMessage.innerHTML = "Player Loses :(";
-        else if(gameState === GameState.WIN)
+        else if (gameState === GameState.WIN)
             gameStateMessage.innerHTML = "Player Wins :)";
     }
 };
