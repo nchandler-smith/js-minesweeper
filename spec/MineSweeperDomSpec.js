@@ -179,13 +179,13 @@ describe("Testing DOM manipulation", function () {
         expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
     });
 
-    it("given cell revealed with one adjacent mine, set cell text to 1", function() {
-        let cellDOM = document.getElementById(TEST_CELL0_ID);
-
-        board.addMines([1]);
-        cellDOM.click();
-
-        expect(cellDOM.innerHTML).toEqual("1");
-    });
+    // it("given cell revealed with one adjacent mine, set cell text to 1", function() {
+    //     let cellDOM = document.getElementById(TEST_CELL0_ID);
+    //
+    //     board.addMines([1]);
+    //     cellDOM.click();
+    //
+    //     expect(cellDOM.innerHTML).toEqual("1");
+    // });
 });
 

@@ -28,29 +28,44 @@ Board.prototype.addMines = function (indices) {
         this.cells[number].placeMine();
         this.numberOfMines++;
         this.mineIndices.push(number);
-        getAdjacentIndices(number, this.length).forEach(index => this.cells[index].setAdjacentMines(1));
+        // getAdjacentIndices(number, this.length).forEach(index => this.cells[index].setAdjacentMines(1));
     });
 
-    function getAdjacentIndices(cellIndex, length) {
-        let adjacentIndices = [];
-
-        adjacentIndices.push(cellIndex + 1);
-        adjacentIndices.push(Math.sqrt(length));
-        adjacentIndices.push(Math.sqrt(length) + 1);
-
-        return adjacentIndices;
-    }
+    // function getAdjacentIndices(cellIndex, length) {
+    //     let adjacentIndices = [];
+    //
+    //     adjacentIndices.push(cellIndex + 1);
+    //     adjacentIndices.push(Math.sqrt(length));
+    //     adjacentIndices.push(Math.sqrt(length) + 1);
+    //
+    //     return adjacentIndices;
+    // }
 };
 
-Board.prototype.revealCell = function (cellIndex) {
-    if (this.cells[cellIndex].reveal()) {
-        this.gameState = GameState.LOSE;
-    } else {
-        this.unToggledCells--;
+function checkGameWin(mineIsRevealed) {
+    if (!mineIsRevealed) {
         if (this.unToggledCells === this.numberOfMines) {
             this.gameState = GameState.WIN;
         }
     }
+}
+
+function checkGameLose(mineIsRevealed) {
+    if (mineIsRevealed) {
+        this.gameState = GameState.LOSE;
+    }
+}
+
+function updateGameState(mineIsRevealed) {
+    checkGameLose.call(this, mineIsRevealed);
+    checkGameWin.call(this, mineIsRevealed);
+}
+
+Board.prototype.revealCell = function (cellIndex) {
+    this.unToggledCells--;
+    let mineIsRevealed = this.cells[cellIndex].reveal();
+
+    updateGameState.call(this, mineIsRevealed);
 
     return this.gameState;
 };

@@ -58,26 +58,26 @@ describe("Mine Sweeper Tests", function () {
             expect(gameState).toEqual(GameState.IN_PROGRESS);
         });
 
-        it("given cells with mines, getMines returns indexes of cells containing a mine", function () {
-            let mineLocations = [0];
-            board.addMines(mineLocations);
-            const mineIndices = board.getMines();
-
-            expect(mineIndices).toEqual(mineLocations);
-        });
-
-        it("given a single mine added, cells adjacent to mine have one adjacent mine", function() {
-            let mineLocations = [0];
-            board.addMines(mineLocations);
-
-            let adjacentCell1 = board.getCells()[1];
-            let adjacentCell2 = board.getCells()[3];
-            let adjacentCell3 = board.getCells()[4];
-
-            expect(adjacentCell1.getAdjacentMines()).toEqual(1);
-            expect(adjacentCell2.getAdjacentMines()).toEqual(1);
-            expect(adjacentCell3.getAdjacentMines()).toEqual(1);
-        });
+        // it("given cells with mines, getMines returns indexes of cells containing a mine", function () {
+        //     let mineLocations = [0];
+        //     board.addMines(mineLocations);
+        //     const mineIndices = board.getMines();
+        //
+        //     expect(mineIndices).toEqual(mineLocations);
+        // });
+        //
+        // it("given a single mine added, cells adjacent to mine have one adjacent mine", function() {
+        //     let mineLocations = [0];
+        //     board.addMines(mineLocations);
+        //
+        //     let adjacentCell1 = board.getCells()[1];
+        //     let adjacentCell2 = board.getCells()[3];
+        //     let adjacentCell3 = board.getCells()[4];
+        //
+        //     expect(adjacentCell1.getAdjacentMines()).toEqual(1);
+        //     expect(adjacentCell2.getAdjacentMines()).toEqual(1);
+        //     expect(adjacentCell3.getAdjacentMines()).toEqual(1);
+        // });
     });
 
     describe("Cell Tests", function () {
