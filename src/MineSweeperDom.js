@@ -4,7 +4,7 @@ function DomManipulation() {
 
 DomManipulation.prototype.init = function (board) {
 
-    const {cellsView, gameStateMessage, gameResetButton} = buildGame(this);
+    const {cellsView} = buildGame(this);
     setGameCellEventListeners();
     setResetGameEventListener();
 
@@ -79,7 +79,7 @@ DomManipulation.prototype.init = function (board) {
         gameSpace.appendChild(gameResetButton);
         document.body.appendChild(gameSpace);
 
-        return {cellsView, gameStateMessage, gameResetButton};
+        return {cellsView};
     }
 
     function setGameCellEventListeners() {
@@ -91,6 +91,7 @@ DomManipulation.prototype.init = function (board) {
                     showMines();
                     updateGameStateMessage(gameState);
                     cellsView.forEach(element => element.disabled = true);
+                    const gameResetButton = document.getElementById("ResetGame");
                     gameResetButton.style.visibility = "visible";
                 }
             });
@@ -98,6 +99,7 @@ DomManipulation.prototype.init = function (board) {
     }
 
     function setResetGameEventListener() {
+        const gameResetButton = document.getElementById("ResetGame");
         gameResetButton.addEventListener("click", () => {
             window.location.reload();
         });
@@ -109,6 +111,7 @@ DomManipulation.prototype.init = function (board) {
     }
 
     function updateGameStateMessage(gameState) {
+        const gameStateMessage = document.getElementById("GameState")
         if (gameState === GameState.LOSE)
             gameStateMessage.innerHTML = "Player Loses :(";
         else if (gameState === GameState.WIN)
