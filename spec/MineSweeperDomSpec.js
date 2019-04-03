@@ -7,7 +7,8 @@ describe("Testing DOM manipulation", function () {
     const GAME_IN_PROGRESS_MESSAGE = "Game in progress...";
     const GAME_WIN_MESSAGE = "Player Wins :)";
     const GAME_LOSE_MESSAGE = "Player Loses :(";
-    const TEST_DIV_ID = "GameBoard";
+    const TEST_DIV_ID = "GameSpace";
+    const TEST_BOARD_ID = "GameBoard";
     const TEST_CELL0_ID = "Cell0";
     const TEST_CELL1_ID = "Cell1";
     const GAME_STATE_MESSAGE_ID = "GameState";
@@ -43,18 +44,20 @@ describe("Testing DOM manipulation", function () {
 
     function createFreshBoard() {
         const gameSpace = document.createElement('div');
+        const gameBoard = document.createElement('div');
         const boardBreak = document.createElement('br');
         gameSpace.id = TEST_DIV_ID;
+        gameBoard.id = TEST_BOARD_ID;
 
         for(let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
             for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                 const cell = document.createElement('button');
                 cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
                 cell.className = CELL_BUTTON_CLASS_NAME;
-                gameSpace.appendChild(cell);
+                gameBoard.appendChild(cell);
             }
             const rowBreak = document.createElement('br');
-            gameSpace.appendChild(rowBreak);
+            gameBoard.appendChild(rowBreak);
         }
 
         const gameStateMessage = document.createElement('t');
@@ -66,7 +69,7 @@ describe("Testing DOM manipulation", function () {
         gameResetButton.innerHTML = GAME_RESET_BUTTON_TEXT;
         gameResetButton.style.visibility = "hidden";
 
-
+        gameSpace.appendChild(gameBoard);
         gameSpace.appendChild(boardBreak);
         gameSpace.appendChild(gameStateMessage);
         gameSpace.appendChild(boardBreak);

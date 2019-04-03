@@ -13,14 +13,19 @@ DomManipulation.prototype.init = function (board) {
         const WIDTH = 3;
 
         function createCellGrid() {
+            const gameBoard = document.createElement('div');
+            gameBoard.id = "GameBoard";
+
             for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
                 for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                     const cell = createCell(heightIndex, widthIndex);
-                    gameSpace.appendChild(cell);
+                    gameBoard.appendChild(cell);
                     cellsView.push(cell);
                 }
-                gameSpace.appendChild(createBoardBreak());
+                gameBoard.appendChild(createBoardBreak());
             }
+
+            return gameBoard;
         }
 
         function createCell(heightIndex, widthIndex) {
@@ -51,16 +56,18 @@ DomManipulation.prototype.init = function (board) {
 
         function createGameSpace() {
             const div = document.createElement('div');
-            div.id = "GameBoard";
+            div.id = "GameSpace";
+
             return div;
         }
 
         const gameSpace = createGameSpace();
-        createCellGrid();
+        const gameBoard = createCellGrid();
         const boardBreak = createBoardBreak();
         const gameStateMessage = createGameStateMessage();
         const gameResetButton = createGameResetButton();
 
+        gameSpace.appendChild(gameBoard);
         gameSpace.appendChild(boardBreak);
         gameSpace.appendChild(gameStateMessage);
         gameSpace.appendChild(boardBreak);
@@ -105,7 +112,7 @@ DomManipulation.prototype.init = function (board) {
 };
 
 DomManipulation.prototype.kill = function () {
-    let div = document.getElementById("GameBoard");
+    let div = document.getElementById("GameSpace");
     document.body.removeChild(div);
 };
 
