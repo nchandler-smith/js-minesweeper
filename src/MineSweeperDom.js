@@ -3,19 +3,25 @@ function DomManipulation() {
 
 DomManipulation.prototype.init = function (board) {
 
-    const {cellsView, gameStateMessage, gameResetButton} = buildBoard();
+    const {cellsView, gameStateMessage, gameResetButton} = buildGame();
     setGameCellEventListeners();
     setResetGameEventListener();
 
-    function buildBoard() {
+    function buildGame() {
         let cellsView = [];
         const HEIGHT = 3;
         const WIDTH = 3;
 
-        function createCellGrid() {
+        function createGameBoard() {
             const gameBoard = document.createElement('div');
             gameBoard.id = "GameBoard";
 
+            createCellGrid(gameBoard);
+
+            return gameBoard;
+        }
+
+        function createCellGrid(gameBoard) {
             for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
                 for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                     const cell = createCell(heightIndex, widthIndex);
@@ -24,8 +30,6 @@ DomManipulation.prototype.init = function (board) {
                 }
                 gameBoard.appendChild(createBoardBreak());
             }
-
-            return gameBoard;
         }
 
         function createCell(heightIndex, widthIndex) {
@@ -62,7 +66,7 @@ DomManipulation.prototype.init = function (board) {
         }
 
         const gameSpace = createGameSpace();
-        const gameBoard = createCellGrid();
+        const gameBoard = createGameBoard();
         const boardBreak = createBoardBreak();
         const gameStateMessage = createGameStateMessage();
         const gameResetButton = createGameResetButton();
