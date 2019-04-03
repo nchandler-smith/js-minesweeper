@@ -3,13 +3,13 @@ function DomManipulation() {
 }
 
 DomManipulation.prototype.init = function (board) {
+    let cellsView = [];
 
-    const {cellsView} = buildGame(this);
+    buildGame(this);
     setGameCellEventListeners();
     setResetGameEventListener();
 
     function buildGame(scope) {
-        let cellsView = [];
         const HEIGHT = 3;
         const WIDTH = 3;
 
