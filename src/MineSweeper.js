@@ -4,26 +4,7 @@ const GameState = {
     LOSE: 2
 };
 
-class BoardModel {
-    constructor () {
-        const callbacks = [];
-        const data = {
-            add_callback: function add_callback (fn) {
-                callbacks.push(fn)
-            }
-        };
 
-        const proxy = new Proxy(data, {
-            set: function (target, property, value) {
-                target[property] = value;
-                callbacks.forEach((callback) => callback());
-                return true;
-            }
-        });
-
-        return proxy
-    }
-}
 
 function Board(length) {
     this.length = length;
@@ -32,7 +13,9 @@ function Board(length) {
     this.unToggledCells = length;
     this.numberOfMines = 0;
     this.mineIndices = [];
+
     this.boardModel = new BoardModel();
+    console.log(this.boardModel.gameStateText);
 }
 
 Board.prototype.addCells = function (cellClass) {
