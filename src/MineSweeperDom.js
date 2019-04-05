@@ -93,6 +93,10 @@ DomManipulation.prototype.init = function (board) {
                     cellsView.forEach(element => element.disabled = true);
                     const gameResetButton = document.getElementById("ResetGame");
                     gameResetButton.style.visibility = "visible";
+                } else {
+                    if(board.getCells()[i].getAdjacentMines() != 0) {
+                        cellsView[i].innerHTML = board.getCells()[i].getAdjacentMines();
+                    }
                 }
             });
         }

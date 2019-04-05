@@ -24,22 +24,90 @@ Board.prototype.getCells = function () {
 };
 
 Board.prototype.addMines = function (indices) {
+    this.mineIndices = indices;
     indices.forEach(number => {
         this.cells[number].placeMine();
         this.numberOfMines++;
-        this.mineIndices.push(number);
-        // getAdjacentIndices(number, this.length).forEach(index => this.cells[index].setAdjacentMines(1));
+        getAdjacentIndices(number, this.length).forEach(index => this.cells[index].incrementMines());
     });
 
-    // function getAdjacentIndices(cellIndex, length) {
-    //     let adjacentIndices = [];
-    //
-    //     adjacentIndices.push(cellIndex + 1);
-    //     adjacentIndices.push(Math.sqrt(length));
-    //     adjacentIndices.push(Math.sqrt(length) + 1);
-    //
-    //     return adjacentIndices;
-    // }
+    function getAdjacentIndices(cellIndex, length) {
+        const sideLength = Math.sqrt(length);
+        let adjacentIndices = [];
+        const isOnLeftEdgeOfBoard = (cellIndex + sideLength) % sideLength === 0;
+        const isOnRightEdgeOfBoard = (cellIndex + sideLength) % sideLength === sideLength - 1;
+        const isOnTopEdgeOfBoard = cellIndex < sideLength;
+        const isOnBottomEdgeOfBoard = cellIndex >= (length - sideLength);
+
+        if(isOnLeftEdgeOfBoard && isOnTopEdgeOfBoard) {
+            adjacentIndices.push(cellIndex + 1);
+            adjacentIndices.push(cellIndex + sideLength);
+            adjacentIndices.push(cellIndex + sideLength + 1)
+        }
+
+        if(isOnTopEdgeOfBoard && !isOnLeftEdgeOfBoard && !isOnRightEdgeOfBoard) {
+            adjacentIndices.push(cellIndex - 1);
+            adjacentIndices.push(cellIndex + 1);
+            adjacentIndices.push(cellIndex + sideLength);
+            adjacentIndices.push(cellIndex + sideLength - 1);
+            adjacentIndices.push(cellIndex + sideLength + 1);
+        }
+
+        if(isOnTopEdgeOfBoard && isOnRightEdgeOfBoard) {
+            adjacentIndices.push(cellIndex - 1);
+            adjacentIndices.push(cellIndex + sideLength);
+            adjacentIndices.push(cellIndex + sideLength - 1)
+        }
+
+        if(isOnLeftEdgeOfBoard && !isOnTopEdgeOfBoard && !isOnBottomEdgeOfBoard) {
+            adjacentIndices.push(cellIndex + 1);
+            adjacentIndices.push(cellIndex - sideLength);
+            adjacentIndices.push(cellIndex - sideLength + 1);
+            adjacentIndices.push(cellIndex + sideLength);
+            adjacentIndices.push(cellIndex + sideLength + 1);
+        }
+
+        if(!isOnLeftEdgeOfBoard && !isOnRightEdgeOfBoard && !isOnTopEdgeOfBoard && !isOnBottomEdgeOfBoard) {
+            adjacentIndices.push(cellIndex - 1);
+            adjacentIndices.push(cellIndex + 1);
+            adjacentIndices.push(cellIndex - sideLength);
+            adjacentIndices.push(cellIndex - sideLength - 1);
+            adjacentIndices.push(cellIndex - sideLength + 1);
+            adjacentIndices.push(cellIndex + sideLength);
+            adjacentIndices.push(cellIndex + sideLength - 1);
+            adjacentIndices.push(cellIndex + sideLength + 1);
+        }
+
+        if(isOnRightEdgeOfBoard && !isOnTopEdgeOfBoard && !isOnBottomEdgeOfBoard) {
+            adjacentIndices.push(cellIndex - 1);
+            adjacentIndices.push(cellIndex - sideLength);
+            adjacentIndices.push(cellIndex - sideLength - 1);
+            adjacentIndices.push(cellIndex + sideLength);
+            adjacentIndices.push(cellIndex + sideLength - 1);
+        }
+
+        if(isOnLeftEdgeOfBoard && isOnBottomEdgeOfBoard) {
+            adjacentIndices.push(cellIndex + 1);
+            adjacentIndices.push(cellIndex - sideLength);
+            adjacentIndices.push(cellIndex - sideLength + 1)
+        }
+
+        if(isOnBottomEdgeOfBoard && !isOnLeftEdgeOfBoard && !isOnRightEdgeOfBoard) {
+            adjacentIndices.push(cellIndex - 1);
+            adjacentIndices.push(cellIndex + 1);
+            adjacentIndices.push(cellIndex - sideLength);
+            adjacentIndices.push(cellIndex - sideLength - 1);
+            adjacentIndices.push(cellIndex - sideLength + 1);
+        }
+
+        if(isOnBottomEdgeOfBoard && isOnRightEdgeOfBoard) {
+            adjacentIndices.push(cellIndex - 1);
+            adjacentIndices.push(cellIndex - sideLength);
+            adjacentIndices.push(cellIndex - sideLength - 1)
+        }
+
+        return adjacentIndices;
+    }
 };
 
 function checkGameWin(mineIsRevealed) {
@@ -86,8 +154,8 @@ function Cell() {
         this.hasMine = true;
     };
 
-    Cell.prototype.setAdjacentMines = function (numberOfMines) {
-        this.adjacentMines = numberOfMines;
+    Cell.prototype.incrementMines = function () {
+        this.adjacentMines++;
     };
 
     Cell.prototype.getAdjacentMines = function () {
