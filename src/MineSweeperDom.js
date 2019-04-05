@@ -10,8 +10,8 @@ DomManipulation.prototype.init = function (board) {
     setResetGameEventListener();
 
     function buildGame(scope) {
-        const HEIGHT = 3;
-        const WIDTH = 3;
+        const HEIGHT = 10;
+        const WIDTH = 10;
 
         function createGameBoard() {
             const gameBoard = document.createElement('div');
