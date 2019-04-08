@@ -1,50 +1,91 @@
 function DomManipulation() {
+    this.GAME_SPACE_ID = "GameSpace";
 }
 
 DomManipulation.prototype.init = function (board) {
+    let cellsView = [];
 
-    const {cellsView, gameStateMessage, gameResetButton} = buildBoard();
+    buildGame(this);
     setGameCellEventListeners();
     setResetGameEventListener();
 
-    function buildBoard() {
-        const HEIGHT = 3;
-        const WIDTH = 3;
+    function buildGame(scope) {
+        const HEIGHT = Math.sqrt(board.length);
+        const WIDTH = Math.sqrt(board.length);
 
-        const div = document.createElement('div');
-        let cellsView = [];
-        const boardBreak = document.createElement('br');
+        function createGameBoard() {
+            const gameBoard = document.createElement('div');
+            gameBoard.id = "GameBoard";
 
-        for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
-            for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
-                const cell = document.createElement('button');
-                cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
-                cell.className = "Cell";
-                div.appendChild(cell);
-                cellsView.push(cell)
-            }
-            const rowBreak = document.createElement('br');
-            div.appendChild(rowBreak);
+            createCellGrid(gameBoard);
+
+            return gameBoard;
         }
 
-        const gameStateMessage = document.createElement('t');
-        div.id = "GameBoard";
+        function createCellGrid(gameBoard) {
+            for (let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
+                createCellRow(heightIndex);
+            }
 
-        gameStateMessage.id = "GameState";
-        gameStateMessage.innerHTML = "Game in progress...";
+            function addCellToGrid(heightIndex, widthIndex) {
+                const cell = createCell(heightIndex, widthIndex);
+                gameBoard.appendChild(cell);
+                cellsView.push(cell);
+            }
 
-        const gameResetButton = document.createElement('button');
-        gameResetButton.id = "ResetGame";
-        gameResetButton.innerHTML = "Reset Game";
-        gameResetButton.style.visibility = "hidden";
+            function createCellRow(heightIndex) {
+                for (let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
+                    addCellToGrid(heightIndex, widthIndex);
+                }
+                gameBoard.appendChild(createBoardBreak());
+            }
+        }
 
-        div.appendChild(boardBreak);
-        div.appendChild(gameStateMessage);
-        div.appendChild(boardBreak);
-        div.appendChild(gameResetButton);
-        document.body.appendChild(div);
+        function createCell(heightIndex, widthIndex) {
+            const cell = document.createElement('button');
+            cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
+            cell.className = "Cell";
+            return cell;
+        }
 
-        return {cellsView, gameStateMessage, gameResetButton};
+        function createBoardBreak() {
+            return document.createElement('br');
+        }
+
+        function createGameStateMessage() {
+            const gameStateMessage = document.createElement('t');
+            gameStateMessage.id = "GameState";
+            gameStateMessage.innerHTML = "Game in progress...";
+            return gameStateMessage;
+        }
+
+        function createGameResetButton() {
+            const gameResetButton = document.createElement('button');
+            gameResetButton.id = "ResetGame";
+            gameResetButton.innerHTML = "Reset Game";
+            gameResetButton.style.visibility = "hidden";
+            return gameResetButton;
+        }
+
+        function createGameSpace(scope) {
+            const div = document.createElement('div');
+            div.id = scope.GAME_SPACE_ID;
+
+            return div;
+        }
+
+        const gameSpace = createGameSpace(scope);
+        const gameBoard = createGameBoard();
+        const boardBreak = createBoardBreak();
+        const gameStateMessage = createGameStateMessage();
+        const gameResetButton = createGameResetButton();
+
+        gameSpace.appendChild(gameBoard);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameStateMessage);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameResetButton);
+        document.body.appendChild(gameSpace);
     }
 
     function setGameCellEventListeners() {
@@ -56,33 +97,40 @@ DomManipulation.prototype.init = function (board) {
                     showMines();
                     updateGameStateMessage(gameState);
                     cellsView.forEach(element => element.disabled = true);
+                    const gameResetButton = document.getElementById("ResetGame");
                     gameResetButton.style.visibility = "visible";
+                } else {
+                    if(board.getCells()[i].getAdjacentMines() != 0) {
+                        cellsView[i].innerHTML = board.getCells()[i].getAdjacentMines();
+                    }
                 }
             });
         }
     }
 
     function setResetGameEventListener() {
+        const gameResetButton = document.getElementById("ResetGame");
         gameResetButton.addEventListener("click", () => {
             window.location.reload();
         });
     }
 
-    function showMines(){
+    function showMines() {
         const mineIndices = board.getMines();
         mineIndices.forEach(index => cellsView[index].innerHTML = "*");
     }
 
-    function updateGameStateMessage(gameState){
-        if(gameState === GameState.LOSE)
+    function updateGameStateMessage(gameState) {
+        const gameStateMessage = document.getElementById("GameState")
+        if (gameState === GameState.LOSE)
             gameStateMessage.innerHTML = "Player Loses :(";
-        else if(gameState === GameState.WIN)
+        else if (gameState === GameState.WIN)
             gameStateMessage.innerHTML = "Player Wins :)";
     }
 };
 
 DomManipulation.prototype.kill = function () {
-    let div = document.getElementById("GameBoard");
+    let div = document.getElementById(this.GAME_SPACE_ID);
     document.body.removeChild(div);
 };
 

@@ -1,13 +1,14 @@
 describe("Testing DOM manipulation", function () {
     const HEIGHT = 3;
     const WIDTH = 3;
-    const LENGTH = HEIGHT * WIDTH;
+    const SIDE_LENGTH = 3;
     const CLEAR_CHAR = "";
     const MINE_CHAR = "*";
     const GAME_IN_PROGRESS_MESSAGE = "Game in progress...";
     const GAME_WIN_MESSAGE = "Player Wins :)";
     const GAME_LOSE_MESSAGE = "Player Loses :(";
-    const TEST_DIV_ID = "GameBoard";
+    const TEST_DIV_ID = "GameSpace";
+    const TEST_BOARD_ID = "GameBoard";
     const TEST_CELL0_ID = "Cell0";
     const TEST_CELL1_ID = "Cell1";
     const GAME_STATE_MESSAGE_ID = "GameState";
@@ -18,7 +19,7 @@ describe("Testing DOM manipulation", function () {
     let dom;
 
     beforeEach(function () {
-        board = new Board(LENGTH);
+        board = new Board(SIDE_LENGTH);
         board.addCells(Cell);
         dom = new DomManipulation();
         dom.init(board);
@@ -42,19 +43,21 @@ describe("Testing DOM manipulation", function () {
     }
 
     function createFreshBoard() {
-        const div = document.createElement('div');
+        const gameSpace = document.createElement('div');
+        const gameBoard = document.createElement('div');
         const boardBreak = document.createElement('br');
-        div.id = TEST_DIV_ID;
+        gameSpace.id = TEST_DIV_ID;
+        gameBoard.id = TEST_BOARD_ID;
 
         for(let heightIndex = 0; heightIndex < HEIGHT; heightIndex++) {
             for(let widthIndex = 0; widthIndex < WIDTH; widthIndex++) {
                 const cell = document.createElement('button');
                 cell.id = "Cell" + (((heightIndex * HEIGHT) + widthIndex));
                 cell.className = CELL_BUTTON_CLASS_NAME;
-                div.appendChild(cell);
+                gameBoard.appendChild(cell);
             }
             const rowBreak = document.createElement('br');
-            div.appendChild(rowBreak);
+            gameBoard.appendChild(rowBreak);
         }
 
         const gameStateMessage = document.createElement('t');
@@ -66,13 +69,13 @@ describe("Testing DOM manipulation", function () {
         gameResetButton.innerHTML = GAME_RESET_BUTTON_TEXT;
         gameResetButton.style.visibility = "hidden";
 
+        gameSpace.appendChild(gameBoard);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameStateMessage);
+        gameSpace.appendChild(boardBreak);
+        gameSpace.appendChild(gameResetButton);
 
-        div.appendChild(boardBreak);
-        div.appendChild(gameStateMessage);
-        div.appendChild(boardBreak);
-        div.appendChild(gameResetButton);
-
-        return div;
+        return gameSpace;
     }
 
     afterEach(function () {
@@ -177,6 +180,15 @@ describe("Testing DOM manipulation", function () {
         rollOutWinningGame();
 
         expect(cellWithMine.innerHTML).toEqual(MINE_CHAR);
+    });
+
+    it("given cell revealed with one adjacent mine, set cell text to 1", function() {
+        let cellDOM = document.getElementById(TEST_CELL0_ID);
+
+        board.addMines([1]);
+        cellDOM.click();
+
+        expect(cellDOM.innerHTML).toEqual("1");
     });
 });
 
