@@ -1,7 +1,7 @@
 describe("Testing DOM manipulation", function () {
     const HEIGHT = 3;
     const WIDTH = 3;
-    const LENGTH = HEIGHT * WIDTH;
+    const SIDE_LENGTH = 3;
     const CLEAR_CHAR = "";
     const MINE_CHAR = "*";
     const GAME_IN_PROGRESS_MESSAGE = "Game in progress...";
@@ -19,7 +19,7 @@ describe("Testing DOM manipulation", function () {
     let dom;
 
     beforeEach(function () {
-        board = new Board(LENGTH);
+        board = new Board(SIDE_LENGTH);
         board.addCells(Cell);
         dom = new DomManipulation();
         dom.init(board);

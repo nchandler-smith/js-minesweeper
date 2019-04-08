@@ -4,11 +4,11 @@ const GameState = {
     LOSE: 2
 };
 
-function Board(length) {
-    this.length = length;
+function Board(sideLength) {
+    this.length = Math.pow(sideLength,2 );
     this.cells = [];
     this.gameState = GameState.IN_PROGRESS;
-    this.unToggledCells = length;
+    this.unToggledCells = this.length;
     this.numberOfMines = 0;
     this.mineIndices = [];
 }
@@ -39,71 +39,60 @@ Board.prototype.addMines = function (indices) {
         const isOnTopEdgeOfBoard = cellIndex < sideLength;
         const isOnBottomEdgeOfBoard = cellIndex >= (length - sideLength);
 
-        if(isOnLeftEdgeOfBoard && isOnTopEdgeOfBoard) {
-            adjacentIndices.push(cellIndex + 1);
-            adjacentIndices.push(cellIndex + sideLength);
-            adjacentIndices.push(cellIndex + sideLength + 1)
+        addRightIndex();
+        addLeftIndex();
+        addBelowIndex();
+        addAboveIndex();
+        addBelowRightIndex();
+        addBelowLeftIndex();
+        addAboveRightIndex();
+        addAboveLeftIndex();
+
+        function addRightIndex() {
+            if(!isOnRightEdgeOfBoard) {
+                adjacentIndices.push(cellIndex + 1);
+            }
         }
 
-        if(isOnTopEdgeOfBoard && !isOnLeftEdgeOfBoard && !isOnRightEdgeOfBoard) {
-            adjacentIndices.push(cellIndex - 1);
-            adjacentIndices.push(cellIndex + 1);
-            adjacentIndices.push(cellIndex + sideLength);
-            adjacentIndices.push(cellIndex + sideLength - 1);
-            adjacentIndices.push(cellIndex + sideLength + 1);
+        function addLeftIndex() {
+            if(!isOnLeftEdgeOfBoard) {
+                adjacentIndices.push(cellIndex - 1);
+            }
         }
 
-        if(isOnTopEdgeOfBoard && isOnRightEdgeOfBoard) {
-            adjacentIndices.push(cellIndex - 1);
-            adjacentIndices.push(cellIndex + sideLength);
-            adjacentIndices.push(cellIndex + sideLength - 1)
+        function addBelowIndex() {
+            if(!isOnBottomEdgeOfBoard) {
+                adjacentIndices.push(cellIndex + sideLength);
+            }
         }
 
-        if(isOnLeftEdgeOfBoard && !isOnTopEdgeOfBoard && !isOnBottomEdgeOfBoard) {
-            adjacentIndices.push(cellIndex + 1);
-            adjacentIndices.push(cellIndex - sideLength);
-            adjacentIndices.push(cellIndex - sideLength + 1);
-            adjacentIndices.push(cellIndex + sideLength);
-            adjacentIndices.push(cellIndex + sideLength + 1);
+        function addAboveIndex() {
+            if(!isOnTopEdgeOfBoard) {
+                adjacentIndices.push(cellIndex - sideLength);
+            }
         }
 
-        if(!isOnLeftEdgeOfBoard && !isOnRightEdgeOfBoard && !isOnTopEdgeOfBoard && !isOnBottomEdgeOfBoard) {
-            adjacentIndices.push(cellIndex - 1);
-            adjacentIndices.push(cellIndex + 1);
-            adjacentIndices.push(cellIndex - sideLength);
-            adjacentIndices.push(cellIndex - sideLength - 1);
-            adjacentIndices.push(cellIndex - sideLength + 1);
-            adjacentIndices.push(cellIndex + sideLength);
-            adjacentIndices.push(cellIndex + sideLength - 1);
-            adjacentIndices.push(cellIndex + sideLength + 1);
+        function addBelowRightIndex() {
+            if(!isOnBottomEdgeOfBoard && !isOnRightEdgeOfBoard)
+                adjacentIndices.push(cellIndex + sideLength + 1)
         }
 
-        if(isOnRightEdgeOfBoard && !isOnTopEdgeOfBoard && !isOnBottomEdgeOfBoard) {
-            adjacentIndices.push(cellIndex - 1);
-            adjacentIndices.push(cellIndex - sideLength);
-            adjacentIndices.push(cellIndex - sideLength - 1);
-            adjacentIndices.push(cellIndex + sideLength);
-            adjacentIndices.push(cellIndex + sideLength - 1);
+        function addBelowLeftIndex() {
+            if(!isOnBottomEdgeOfBoard && !isOnLeftEdgeOfBoard) {
+                adjacentIndices.push(cellIndex + sideLength - 1);
+            }
         }
 
-        if(isOnLeftEdgeOfBoard && isOnBottomEdgeOfBoard) {
-            adjacentIndices.push(cellIndex + 1);
-            adjacentIndices.push(cellIndex - sideLength);
-            adjacentIndices.push(cellIndex - sideLength + 1)
+        function addAboveRightIndex() {
+            if(!isOnTopEdgeOfBoard && !isOnRightEdgeOfBoard) {
+                adjacentIndices.push(cellIndex - sideLength + 1);
+            }
         }
 
-        if(isOnBottomEdgeOfBoard && !isOnLeftEdgeOfBoard && !isOnRightEdgeOfBoard) {
-            adjacentIndices.push(cellIndex - 1);
-            adjacentIndices.push(cellIndex + 1);
-            adjacentIndices.push(cellIndex - sideLength);
-            adjacentIndices.push(cellIndex - sideLength - 1);
-            adjacentIndices.push(cellIndex - sideLength + 1);
-        }
-
-        if(isOnBottomEdgeOfBoard && isOnRightEdgeOfBoard) {
-            adjacentIndices.push(cellIndex - 1);
-            adjacentIndices.push(cellIndex - sideLength);
-            adjacentIndices.push(cellIndex - sideLength - 1)
+        function addAboveLeftIndex() {
+            if(!isOnTopEdgeOfBoard && !isOnLeftEdgeOfBoard) {
+                adjacentIndices.push(cellIndex - sideLength - 1);
+            }
         }
 
         return adjacentIndices;

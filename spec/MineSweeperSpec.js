@@ -1,16 +1,16 @@
 describe("Mine Sweeper Tests", function () {
     describe("Game Board Tests", function () {
-        let length = 9;
+        let sideLength = 3;
         const cellLocation = 0;
         let board;
 
         beforeEach(function () {
-            board = new Board(length);
+            board = new Board(sideLength);
             board.addCells(Cell);
         });
 
-        it("given square board then number of cells equal to square of length", function () {
-            expect(board.getCells().length).toBe(length);
+        it("given square board then number of cells equal to square of sideLength", function () {
+            expect(board.getCells().length).toBe(Math.pow(sideLength, 2));
         });
 
         it("given cell with mine when reveal then game state is LOSE", function () {
